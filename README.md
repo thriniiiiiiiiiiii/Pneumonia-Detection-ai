@@ -1,6 +1,3 @@
-<p align="center">
-  <img src="demo/AI_Detects_Pneumonia_Saves_Childhoods.gif" alt="PneumoDetect AI — Real-time pneumonia detection demo" style="width: 100%; max-width: 1000px; height: auto;" />
-</p>
 
 <h1 align="center">PneumoDetect AI</h1>
 <h3 align="center">Clinical-Grade Pediatric Pneumonia Detection via Cross-Operator Validated Deep Learning</h3>
@@ -27,31 +24,7 @@
 
 ---
 
-## 📑 Table of Contents
-
-- [Vision & Problem Statement](#-vision--problem-statement)
-- [Live Experience](#-live-experience)
-- [Key Achievements](#-key-achievements)
-- [System Architecture](#-system-architecture)
-- [AI/ML Pipeline](#-aiml-pipeline)
-- [Performance & Validation](#-performance--validation)
-- [Tech Stack](#-tech-stack)
-- [Project Structure](#-project-structure)
-- [Quick Start](#-quick-start)
-- [API Reference](#-api-reference)
-- [Infrastructure Design](#-infrastructure-design)
-- [Security Model](#-security-model)
-- [Scalability Design](#-scalability-design)
-- [Datasets & Preprocessing](#-datasets--preprocessing)
-- [Research Methodology](#-research-methodology)
-- [Observability & Logging](#-observability--logging)
-- [Performance Considerations](#-performance-considerations)
-- [Future Roadmap](#-future-roadmap)
-- [Contributing](#-contributing)
-- [Medical Disclaimers](#-medical-disclaimers)
-- [Citation & License](#-citation--license)
-
----
+#---
 
 ## 🎯 Vision & Problem Statement
 
@@ -67,20 +40,8 @@
 
 ---
 
-## 🌐 Live Experience
 
-<p align="center">
-  <img src="demo/pneumodetect_demo.gif" alt="PneumoDetect AI web interface demo" width="800"/>
-</p>
-
-| Interface | URL | Description |
-|---|---|---|
-| 🌐 **Web App** | [pneumodetectai.streamlit.app](https://pneumodetectai.streamlit.app) | Upload X-ray → instant AI analysis |
-| 🔌 **REST API** | [pneumodetect-api.onrender.com](https://pneumodetect-api.onrender.com/docs) | FastAPI with Swagger UI |
-| 🤗 **Model Hub** | [huggingface.co/ayushirathour](https://huggingface.co/ayushirathour/chest-xray-pneumonia-detection) | Download pre-trained weights |
-| 📄 **Research Paper** | [doi.org/10.5281/zenodo.17531598](https://doi.org/10.5281/zenodo.17531598) | Published in IJSET Vol. 13 |
-
----
+--
 
 ## 🏆 Key Achievements
 
@@ -101,31 +62,31 @@
 
 ```mermaid
 graph TB
-    subgraph CLIENT["👩‍💻 Client Layer"]
+    subgraph CLIENT[" Client Layer"]
         WEB["Streamlit Web App<br/>DICOM · GradCAM · PDF Reports"]
         API_CLIENT["API Consumers<br/>REST Clients · Python SDK"]
     end
 
-    subgraph GATEWAY["🔀 API Gateway (FastAPI)"]
+    subgraph GATEWAY["API Gateway (FastAPI)"]
         ROUTER["Request Router"]
         AUTH["Auth Middleware"]
         RATE["Rate Limiter"]
         VALIDATOR["Input Validator<br/>Image Format · Size · Type"]
     end
 
-    subgraph INFERENCE["🧠 Inference Engine"]
+    subgraph INFERENCE[" Inference Engine"]
         PREPROC["Preprocessor<br/>224×224 · Normalize · Augment"]
         MODEL["MobileNetV2 + Custom Head<br/>TensorFlow 2.19"]
         POSTPROC["Post-Processor<br/>Sigmoid · Confidence · GradCAM"]
         CACHE["Model Cache<br/>In-memory singleton"]
     end
 
-    subgraph STORAGE["💾 Storage"]
+    subgraph STORAGE[" Storage"]
         HF["HuggingFace Hub<br/>Model Weights v1.0"]
         RESULTS_DB["Results Store<br/>Ephemeral (zero data storage)"]
     end
 
-    subgraph OBS["📊 Observability"]
+    subgraph OBS[" Observability"]
         LOGS["Structured Logging<br/>JSON · Request ID tracing"]
         METRICS["Performance Metrics<br/>Latency · Confidence dist."]
     end
@@ -306,93 +267,6 @@ chest-xray-pneumonia-detection-ai/
 └── SECURITY.md                         # Vulnerability disclosure policy
 ```
 
----
-
-## 🚀 Quick Start
-
-### Option 1 — Live Web App (Zero Setup)
-**[→ Try PneumoDetect AI](https://pneumodetectai.streamlit.app/)** — Upload a chest X-ray, get results in 2.5 seconds.
-
----
-
-### Option 2 — Run Locally with Docker
-
-```bash
-# Clone & navigate
-git clone https://github.com/thriniiiiiiiiiiii/Pneumonia-Detection-ai.git
-cd Pneumonia-Detection-ai
-
-# Build and run (API + Streamlit)
-docker compose -f infra/docker/docker-compose.yml up --build
-
-# Access services
-# Streamlit: http://localhost:8501
-# FastAPI:   http://localhost:8000/docs
-```
-
----
-
-### Option 3 — Manual Local Setup
-
-```bash
-git clone https://github.com/thriniiiiiiiiiiii/Pneumonia-Detection-ai.git
-cd Pneumonia-Detection-ai
-
-python -m venv venv
-source venv/bin/activate  # Windows: venv\Scripts\activate
-
-pip install -r requirements.txt
-
-# Start Streamlit web app
-cd api && streamlit run streamlit_api_folder/streamlit_app.py
-
-# OR start FastAPI backend (in a separate terminal)
-uvicorn main:app --host 0.0.0.0 --port 8000 --reload
-```
-
----
-
-### Option 4 — Use Pre-trained Model
-
-```python
-from huggingface_hub import hf_hub_download
-import tensorflow as tf
-import numpy as np
-from PIL import Image
-
-# Download from HuggingFace Hub
-model_path = hf_hub_download(
-    repo_id="ayushirathour/chest-xray-pneumonia-detection",
-    filename="best_chest_xray_model.h5"
-)
-model = tf.keras.models.load_model(model_path)
-
-# Inference
-img = Image.open("chest_xray.jpg").convert("RGB").resize((224, 224))
-arr = np.expand_dims(np.array(img) / 255.0, axis=0)
-score = model.predict(arr)[0][0]
-print(f"Diagnosis: {'PNEUMONIA' if score > 0.5 else 'NORMAL'} ({score:.1%} confidence)")
-```
-
----
-
-### Option 5 — Full Training Pipeline
-
-```bash
-# 1. Download datasets (see Datasets section)
-# 2. Preprocess
-python scripts/analyze_and_balance.py
-python scripts/create_balanced_dataset.py
-
-# 3. Train
-python run_training.py
-
-# 4. Evaluate
-python scripts/evaluate_model.py
-python scripts/cross-operator_validation.py
-```
-
----
 
 ## 🔌 API Reference
 
@@ -495,18 +369,6 @@ graph TB
 
 ---
 
-## 📈 Scalability Design
-
-```mermaid
-graph LR
-    subgraph SCALE["Horizontal Scaling Strategy"]
-        REQ["Incoming Requests"] --> LB["Load Balancer"]
-        LB --> R1["API Replica 1"]
-        LB --> R2["API Replica 2"]
-        LB --> R3["API Replica N"]
-        R1 & R2 & R3 --> SHARED_MODEL["Shared Model Cache<br/>(Redis / in-process)"]
-    end
-```
 
 | Dimension | Strategy | Target |
 |---|---|---|
@@ -541,20 +403,6 @@ python run_training.py                     # Step 3: Full training execution
 
 ---
 
-## 🔍 Research Methodology
-
-This system implements **rigorous cross-operator validation** — a standard in clinical AI that most academic projects skip.
-
-| Design Aspect | Implementation |
-|---|---|
-| **Temporal Separation** | 2018 training data vs 2024 validation data |
-| **Operator Independence** | Different radiology teams & imaging technologists |
-| **Quality Audit** | Re-verified by senior radiologist (Dr. Pratibha) |
-| **Statistical Test** | Bootstrap AUC comparison (n=1,000) — appropriate for independent datasets |
-| **Sample Size** | 485 non-cherry-picked independent samples |
-| **Reproducibility** | All results archived on Zenodo with DOI |
-
-**Published In:** *International Journal of Science, Engineering and Technology, Vol. 13, No. 5 (2025)*
 
 ---
 
@@ -580,24 +428,7 @@ This system implements **rigorous cross-operator validation** — a standard in 
 
 ---
 
-## 🛣️ Future Roadmap
 
-| Priority | Feature | Status |
-|---|---|---|
-| 🔴 High | Multi-center validation (5+ hospitals) | Planned |
-| 🔴 High | Pneumonia subtype classification (bacterial vs viral) | Planned |
-| 🟡 Medium | DICOM server integration (PACS/HL7) | Research |
-| 🟡 Medium | LIME / SHAP explainability layer | In Progress |
-| 🟡 Medium | Real-time model monitoring dashboard | Planned |
-| 🟢 Low | Mobile app for offline edge inference | Exploratory |
-| 🟢 Low | FDA pre-certification pathway study | Exploratory |
-| 🟢 Low | Pediatric age-group stratified analysis (1-2, 3-5 yrs) | Planned |
-
----
-
-## 🤝 Contributing
-
-We welcome contributions from engineers, researchers, and medical professionals.
 
 ```bash
 # 1. Fork the repo
@@ -652,55 +483,14 @@ In *International Journal of Science, Engineering and Technology* (Vol. 13, No. 
 **Rathour, A. (2025).** *Chest X-Ray Pneumonia Detection: Cross-Operator Validated AI System (v1.0).*
 Zenodo. [https://doi.org/10.5281/zenodo.17520564](https://doi.org/10.5281/zenodo.17520564)
 
-### BibTeX
 
-```bibtex
-@article{rathour2025pneumonia,
-  title   = {Pediatric Pneumonia Detection with a Lightweight, Cross-Operator Validated Deep Learning Model},
-  author  = {Rathour, Ayushi},
-  journal = {International Journal of Science, Engineering and Technology},
-  volume  = {13},
-  number  = {5},
-  year    = {2025},
-  doi     = {10.5281/zenodo.17531598}
-}
 
-@misc{rathour2025code,
-  title  = {Chest X-Ray Pneumonia Detection: Cross-Operator Validated AI System (v1.0)},
-  author = {Rathour, Ayushi},
-  year   = {2025},
-  doi    = {10.5281/zenodo.17520564},
-  url    = {https://github.com/thriniiiiiiiiiiii/Pneumonia-Detection-ai}
-}
-```
-
-### License
-
-**[MIT License](LICENSE)** — Free to use, modify, and distribute with attribution.
-
----
-
-### Acknowledgments
-
-| Contributor | Role |
-|---|---|
-| [Paul Timothy Mooney](https://www.kaggle.com/datasets/paultimothymooney/chest-xray-pneumonia) | Training dataset |
-| [Tanmay Shukla](https://www.kaggle.com/datasets/iamtanmayshukla/pneumonia-radiography-dataset) | Cross-operator validation dataset |
-| Guangzhou Women and Children's Medical Center | Original data source |
-| TensorFlow / Keras | Deep learning framework |
-| HuggingFace | Model hosting infrastructure |
 
 ---
 
 <p align="center">
-  <strong>⚡ Advancing AI in Healthcare Through Rigorous Validation & Accessible Deployment</strong><br/>
+  <strong> Advancing AI in Healthcare Through Rigorous Validation & Accessible Deployment</strong><br/>
   <em>Demonstrating that clinical AI can be scientifically robust, statistically verified, and globally accessible.</em>
 </p>
 
-<p align="center">
-  <a href="https://pneumodetectai.streamlit.app">🌐 Live App</a> ·
-  <a href="https://pneumodetect-api.onrender.com/docs">🔌 API</a> ·
-  <a href="https://huggingface.co/ayushirathour/chest-xray-pneumonia-detection">🤗 Model</a> ·
-  <a href="https://doi.org/10.5281/zenodo.17531598">📄 Paper</a> ·
-  <a href="CONTRIBUTING.md">🤝 Contribute</a>
 </p>
