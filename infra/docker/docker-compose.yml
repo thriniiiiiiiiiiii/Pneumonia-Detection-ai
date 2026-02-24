@@ -1,0 +1,53 @@
+version: "3.9"
+
+# ─────────────────────────────────────────────
+#  PneumoDetect AI — Local Development Stack
+# ─────────────────────────────────────────────
+#
+#  Usage:
+#    docker compose up --build
+#
+#  Services:
+#    api       → FastAPI backend   at http://localhost:8000
+#    streamlit → Streamlit web app at http://localhost:8501
+# ─────────────────────────────────────────────
+
+services:
+  # ── FastAPI Inference API ─────────────────
+  api:
+    build:
+      context: ../..
+      dockerfile: infra/docker/Dockerfile
+    container_name: pneumodetect-api
+    ports:
+      - "8000:8000"
+    environment:
+      - PYTHONUNBUFFERED=1
+      - HF_TOKEN=${HF_TOKEN:-}
+    healthcheck:
+      test: [ "CMD", "python", "-c", "import urllib.request; urllib.request.urlopen('http://localhost:8000/health')" ]
+      interval: 30s
+      timeout: 10s
+      retries: 5
+      start_period: 60s
+    restart: unless-stopped
+
+  # ── Streamlit Web Interface ───────────────
+  streamlit:
+    build:
+      context: ../..
+      dockerfile: infra/docker/Dockerfile.streamlit
+    container_name: pneumodetect-streamlit
+    ports:
+      - "8501:8501"
+    environment:
+      - PYTHONUNBUFFERED=1
+      - API_URL=http://api:8000
+    depends_on:
+      api:
+        condition: service_healthy
+    restart: unless-stopped
+
+networks:
+  default:
+    name: pneumodetect-network
