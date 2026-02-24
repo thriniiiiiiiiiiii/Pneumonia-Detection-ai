@@ -2,12 +2,6 @@
 <h1 align="center">PneumoDetect AI</h1>
 <h3 align="center">Clinical-Grade Pediatric Pneumonia Detection via Cross-Operator Validated Deep Learning</h3>
 
-<p align="center">
-  <a href="https://pneumodetectai.streamlit.app"><img src="https://img.shields.io/badge/🌐_Live_App-pneumodetectai.streamlit.app-brightgreen?style=for-the-badge" alt="Live App"/></a>
-  <a href="https://pneumodetect-api.onrender.com/docs"><img src="https://img.shields.io/badge/🔌_API_Docs-Swagger_UI-blue?style=for-the-badge" alt="API Docs"/></a>
-  <a href="https://huggingface.co/ayushirathour/chest-xray-pneumonia-detection"><img src="https://img.shields.io/badge/🤗_Model-HuggingFace_Hub-yellow?style=for-the-badge" alt="HuggingFace"/></a>
-  <a href="https://doi.org/10.5281/zenodo.17531598"><img src="https://img.shields.io/badge/📄_Paper-Zenodo_DOI-red?style=for-the-badge" alt="Paper"/></a>
-</p>
 
 <p align="center">
   <img src="https://img.shields.io/badge/Python-3.11.9-3776AB?logo=python&logoColor=white" />
@@ -22,9 +16,7 @@
   <strong>86% Cross-Operator Accuracy · 96.4% Sensitivity · 98.8% ROC-AUC · Sub-second Inference · Published Research</strong>
 </p>
 
----
 
-#---
 
 ## 🎯 Vision & Problem Statement
 
@@ -36,12 +28,6 @@
 - Is **deployable anywhere** — Streamlit Cloud, Docker, bare-metal, or cloud-native Kubernetes
 - Has **published research** with DOI-referenced statistical verification
 
-> **⚡ TL;DR:** Upload a chest X-ray → get a clinically contextualized AI diagnosis in < 2.5 seconds. **[Try it live →](https://pneumodetectai.streamlit.app/)**
-
----
-
-
---
 
 ## 🏆 Key Achievements
 
